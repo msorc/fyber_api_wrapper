@@ -11,7 +11,7 @@ describe FyberApiWrapper::Request::Offer do
   let(:wrapper) { FyberApiWrapper::Request::Offer.new(params)}
 
 
-  describe "#get" do
+  describe "#get", :vcr do
     let(:offers) { wrapper.get }
     context "when everything goes well" do
       it "performs a get request and returns a collection of Offers" do

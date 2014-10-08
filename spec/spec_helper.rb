@@ -20,6 +20,7 @@ SimpleCov.start
 
 require 'timecop'
 require 'yaml'
+require 'vcr'
 require 'fyber_api_wrapper'
 
 unless File.exists?('./spec/fyber_api_config.yml')
@@ -33,6 +34,13 @@ unless File.exists?('./spec/fyber_api_config.yml')
   MSG
   puts str
   abort
+end
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/vcr_cassettes'
+  c.hook_into :webmock 
+  c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 7200 }
+  c.configure_rspec_metadata!
 end
 
 test_fyber_config = YAML.load_file('./spec/fyber_api_config.yml')
