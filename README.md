@@ -20,6 +20,8 @@ Or install it yourself as:
 
 ## Usage
 
+FyberApiWrapper has been tested against MRI 2.0, 2.1.1, and 1.9.3 . Other versions should work but use them at your own risk.
+
 ### Configuration
 
 The Fyber API requires a few parameters to be set, namely:
