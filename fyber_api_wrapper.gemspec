@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["yurivm"]
   spec.email         = ["yuri.veremeyenko@gmail.com"]
   spec.summary       = %q{A wrapper over the Fyber Wall API}
-  spec.description   = %q{This gem wraps the Fyber Wall API}
+  spec.description   = %q{This gem wraps the Fyber Wall API and allows you to perform offer requests}
   spec.homepage      = ""
   spec.license       = "MIT"
 
