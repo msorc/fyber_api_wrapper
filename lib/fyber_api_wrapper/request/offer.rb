@@ -12,11 +12,31 @@ module FyberApiWrapper
       end
 
       def get
-        body = perform_request.body
-        FyberApiWrapper::Response::Collection.new(JSON.parse(body))
+        response = perform_request
+        #require 'pry'; binding.pry
+        case response
+          when Net::HTTPUnauthorized
+            json = response.body
+            raise FyberApiWrapper::NotAuthorizedError, error_message(json)
+          when Net::HTTPBadRequest
+            json = response.body
+            raise FyberApiWrapper::RequiredParameterMissingError, error_message(json)
+          when Net::HTTPBadGateway
+          when Net::HTTPClientError
+          when Net::HTTPConflict
+          when Net::HTTPFatalError
+          when Net::HTTPForbidden
+          when Net::HTTPGatewayTimeOut
+            raise FyberApiWrapper::HTTPError, "#{response.class}"
+        end
+        FyberApiWrapper::Response::Collection.new(JSON.parse(response.body))
       end
 
       private
+
+      def error_message(json)
+        "code : #{json["code"]}, message: #{json["message"]}"
+      end
 
       def perform_request
         offer_url = "#{FyberApiWrapper.configuration.offers_url}?#{signed_query_string}"
