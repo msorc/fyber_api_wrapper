@@ -47,7 +47,8 @@ In your app, configure the FyberApiWrapper and supply those parameters:
   end
 
 ```
-
+**NOTE:** Since the api_key is confidential, treat it accordingly. Use environment variables, for example, don't put it on github for everyone to see.
+ 
 ### Performing requests and processing request results
 
 Having configured the gem, you can make requests and obtain offers:
@@ -100,11 +101,12 @@ Having configured the gem, you can make requests and obtain offers:
 ## FAQ
 
 Q: I did everything as described and I'm getting "NoMethodError: undefined method `appid' for nil:NilClass" when trying to execute FyberApiWrapper.get_offers(params)
+
 A: You must have forgotten to configure the FyberApiWrapper. See Configuration above
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/fyber_api_wrapper/fork )
+1. Fork it ( https://github.com/yurivm/fyber_api_wrapper/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
