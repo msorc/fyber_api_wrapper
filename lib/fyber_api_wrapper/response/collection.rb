@@ -19,6 +19,10 @@ module FyberApiWrapper
         offers[key]
       end
 
+      def first
+        offers[0]
+      end
+
       protected
 
       attr_reader :hsh
