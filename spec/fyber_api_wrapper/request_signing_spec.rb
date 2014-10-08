@@ -108,7 +108,6 @@ describe FyberApiWrapper::RequestSigning do
     end
     it "produces the correct hash key" do
       query_str = test_instance.signed_query_string
-      params = CGI::parse(URI.parse("?#{query_str}").query)
       #repeat the hash generation manually here
       tmp = {}
       correct_params.each_pair {|k,v| tmp[k] = v[0]}
