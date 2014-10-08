@@ -1,5 +1,5 @@
 ---
-:appid: 157
+:app_id: 157
 :format: :json
 :device_id: your-device-id
 :locale: :de
