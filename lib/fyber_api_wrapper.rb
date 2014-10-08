@@ -2,6 +2,7 @@ require "fyber_api_wrapper/version"
 require "fyber_api_wrapper/request/request_signing"
 require "fyber_api_wrapper/request/offer"
 require "fyber_api_wrapper/response/collection"
+require "fyber_api_wrapper/response/offer"
 
 module FyberApiWrapper
   
