@@ -13,9 +13,8 @@ module FyberApiWrapper
 
       def get
         body = perform_request.body
-        JSON.parse(body)
+        FyberApiWrapper::Response::Collection.new(JSON.parse(body))
       end
-
 
       private
 
@@ -33,14 +32,14 @@ module FyberApiWrapper
 
       def request_headers
         {
-          "Accept" => "application/#{FyberApiWrapper.configuration.format}",
+          "Accept"          => "application/#{FyberApiWrapper.configuration.format}",
           "User-Agent"      => FyberApiWrapper.configuration.user_agent
         }
       end
 
       def offer_params
         {
-          appid:       FyberApiWrapper.configuration.appid,
+          appid:        FyberApiWrapper.configuration.appid,
           device_id:    FyberApiWrapper.configuration.device_id,
           ip:           FyberApiWrapper.configuration.ip,
           offer_types:  FyberApiWrapper.configuration.offer_types,

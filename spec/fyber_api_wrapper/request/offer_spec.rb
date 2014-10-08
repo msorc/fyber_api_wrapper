@@ -9,14 +9,14 @@ describe FyberApiWrapper::Request::Offer do
     }
   }
   let(:wrapper) { FyberApiWrapper::Request::Offer.new(params)}
-  
+
   describe "#get" do
+    let(:offers) { wrapper.get }
     it "performs a get request and returns a collection of Offers" do
-      offers = wrapper.get
-      require 'pp'
-      pp offers
-      expect(offers).to respond_to(:[])
-      expect(offers).to respond_to(:each)
+      expect(offers).to be_a(FyberApiWrapper::Response::Collection)
+    end
+    it "returns a collection that contains Response::Offers" do
+      offers.each {|o| expect(o).to be_a(FyberApiWrapper::Response::Offer) }
     end
   end
 end
