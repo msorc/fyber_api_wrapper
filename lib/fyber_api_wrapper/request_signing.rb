@@ -30,7 +30,8 @@ module FyberApiWrapper
     end
 
     def hash_to_query(hsh, encode = false)
-      encode ? URI.encode(hsh.map{|k,v| "#{k}=#{v}"}.join("&")) : hsh.map{|k,v| "#{k}=#{v}"}.join("&")
+      str = hsh.map{|k,v| "#{k}=#{v}"}.join("&")
+      encode ? URI.encode(str) : str
     end
 
     def append_api_key(str)
