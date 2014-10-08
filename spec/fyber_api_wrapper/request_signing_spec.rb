@@ -50,6 +50,43 @@ describe FyberApiWrapper::RequestSigning do
         uid: "sample-uid",
       })
     end
-
   end
+
+  describe "#hash_to_query" do
+    it "converts the hash into a query string, turning key-value pairs into key=value separated with ampersands" do
+      hsh = {
+        "sample" => "string",
+        :another => :param,
+        1 => 2      
+      }
+      expect(test_instance.hash_to_query(hsh)).to eq("sample=string&another=param&1=2")
+    end
+    it "translates nil values correctly" do
+      hsh = { "sample" => "string", "empty" => nil}
+      expect(test_instance.hash_to_query(hsh)).to eq("sample=string&empty=")
+    end
+    it "does not encode key/values by default" do
+      hsh = { "the key" => "and value", "blah';" => '%whatever%'}
+      expect(test_instance.hash_to_query(hsh)).to eq("the key=and value&blah';=%whatever%")
+    end
+    it "encodes keys and values properly if asked to do so" do
+      hsh = { "the key" => "and value", "blah';" => '%whatever%'}
+      expect(test_instance.hash_to_query(hsh, true)).to eq("the%20key=and%20value&blah';=%25whatever%25")
+    end
+  end
+
+  describe "#append_api_key" do
+    it "appends an ampersand the API key to the string given" do
+      expect(test_instance.append_api_key("some-test-string")).to eq("some-test-string&#{::FyberApiWrapper.configuration.api_key}")
+    end
+  end
+
+  describe "#query_string_digest" do
+    require 'digest/sha1'
+    it "returns the SHA1 digest of the string given" do
+      str = 'some-test-string&another-test-string'
+      expect(test_instance.query_string_digest(str)).to eq(Digest::SHA1.hexdigest(str))
+    end
+  end
+
 end
