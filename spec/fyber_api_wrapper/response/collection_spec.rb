@@ -680,4 +680,24 @@ describe FyberApiWrapper::Response::Collection do
     end
   end
 
+  describe "#[]" do
+    it "calls offers[]" do
+      o1 = collection.offers[1]
+      expect(o1.title).to eq("Katalog Kiosk")
+    end
+  end
+
+  describe "#each" do
+    it "calls offers.each" do
+      titles = collection.map do |offer|
+        offer.title
+      end
+      expect(titles).to be_a(Array)
+      expect(titles.first).to eq("Connect - Social Map & Address Book")
+    end
+    it "returns an enumerator if no block is given" do
+      expect(collection.each).to be_a(Enumerator)
+    end
+  end
+
 end

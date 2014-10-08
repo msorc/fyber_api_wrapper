@@ -1,12 +1,22 @@
 module FyberApiWrapper
   module Response
     class Collection
+      include Enumerable
+
       attr_accessor :code, :message, :count, :pages, :information, :offers
       
       def initialize(hsh)
         @hsh = hsh
         populate_collection_info
         populate_offers
+      end
+
+      def each(*args, &block)
+        offers.each(*args, &block)
+      end
+
+      def [](key)
+        offers[key]
       end
 
       protected
