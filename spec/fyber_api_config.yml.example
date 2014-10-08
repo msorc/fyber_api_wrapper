@@ -1,7 +1,7 @@
 ---
-:app_id: 157
+:appid: 157
 :format: :json
-:device_id: your-device-id
+:device_id: '\"your-device-id\"'
 :locale: :de
 :ip: 8.8.8.8
 :offer_types:
