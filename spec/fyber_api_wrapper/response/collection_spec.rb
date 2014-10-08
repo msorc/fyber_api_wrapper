@@ -565,8 +565,95 @@ describe FyberApiWrapper::Response::Collection do
       "store_id"=>"de.mobile.android.app"}
     ]}
   }
-
-  describe "#initialize" do
-    it ""
+  let(:json_without_offers) {
+    {"code"=>"NO_CONTENT",
+       "message"=>
+        "Successful request, but no offers are currently available for this user.",
+       "count"=>0,
+       "pages"=>0,
+       "information"=>
+        {"app_name"=>"Demo iframe for publisher - do not touch",
+         "appid"=>157,
+         "virtual_currency"=>"Coins",
+         "country"=>"DE",
+         "language"=>"EN",
+         "support_url"=>
+          "http://api.sponsorpay.com/support?appid=157&feed=on&mobile=on&uid=luc"
+        },
+       "offers"=>[]
+    }
+  }
+  let(:collection) { FyberApiWrapper::Response::Collection.new(json_with_offers) }
+  let(:empty_collection) { FyberApiWrapper::Response::Collection.new(json_without_offers) }
+  
+  describe "#code" do
+    it "provides the correct code value for the non-empty collection" do
+      expect(collection.code).to eq("OK")
+    end
+    it "provides the correct code value for the empty collection" do
+      expect(empty_collection.code).to eq("NO_CONTENT")
+    end
+    it "raises a KeyError if json doesn't contain the message key" do
+      expect { FyberApiWrapper::Response::Collection.new({}).code }.to raise_error(KeyError)
+    end
   end
+
+  describe "#message" do
+    it "provides the correct message value for the non-empty collection" do
+      expect(collection.message).to eq("Ok")
+    end
+    it "provides the correct message value for the empty collection" do
+      expect(empty_collection.message).to eq("Successful request, but no offers are currently available for this user.")
+    end
+    it "raises a KeyError if json doesn't contain the message key" do
+      expect { FyberApiWrapper::Response::Collection.new({}).message }.to raise_error(KeyError)
+    end
+  end
+
+  describe "#count" do
+    it "provides the correct count value for the non-empty collection" do
+      expect(collection.count).to eq(30)
+    end
+    it "provides the correct count value for the empty collection" do
+      expect(empty_collection.count).to eq(0)
+    end
+    it "raises a KeyError if json doesn't contain the count key" do
+      expect { FyberApiWrapper::Response::Collection.new({}).count }.to raise_error(KeyError)
+    end
+  end
+
+  describe "#pages" do
+    it "provides the correct pages value for the non-empty collection" do
+      expect(collection.pages).to eq(5)
+    end
+    it "provides the correct pages value for the empty collection" do
+      expect(empty_collection.pages).to eq(0)
+    end
+    it "raises a KeyError if json doesn't contain the pages key" do
+      expect { FyberApiWrapper::Response::Collection.new({}).pages }.to raise_error(KeyError)
+    end
+  end
+
+  describe "#information" do
+    it "provides correct information if json has offers" do
+      expect(empty_collection.information.app_name).to eq("Demo iframe for publisher - do not touch")
+      expect(empty_collection.information.appid).to eq(157)
+      expect(empty_collection.information.virtual_currency).to eq("Coins")
+      expect(empty_collection.information.country).to eq("DE")
+      expect(empty_collection.information.language).to eq("EN")
+      expect(empty_collection.information.support_url).to eq("http://api.sponsorpay.com/support?appid=157&feed=on&mobile=on&uid=luc")        
+    end
+    it "provides correct information if json doesn't have any offers" do
+      expect(empty_collection.information.app_name).to eq("Demo iframe for publisher - do not touch")
+      expect(empty_collection.information.appid).to eq(157)
+      expect(empty_collection.information.virtual_currency).to eq("Coins")
+      expect(empty_collection.information.country).to eq("DE")
+      expect(empty_collection.information.language).to eq("EN")
+      expect(empty_collection.information.support_url).to eq("http://api.sponsorpay.com/support?appid=157&feed=on&mobile=on&uid=luc")        
+    end
+    it "raises a KeyError if json doesn't contain the information key" do
+      expect { FyberApiWrapper::Response::Collection.new({}).information }.to raise_error(KeyError)
+    end
+  end
+
 end
