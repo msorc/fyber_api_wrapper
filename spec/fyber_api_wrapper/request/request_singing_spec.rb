@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'digest/sha1'
 require 'cgi'
 
-describe FyberApiWrapper::RequestSigning do
+describe FyberApiWrapper::Request::RequestSigning do
   let(:test_class) {
     Class.new do
       
@@ -12,7 +12,7 @@ describe FyberApiWrapper::RequestSigning do
         @params = params
       end
 
-      include FyberApiWrapper::RequestSigning
+      include FyberApiWrapper::Request::RequestSigning
       
     end
   }
@@ -98,19 +98,24 @@ describe FyberApiWrapper::RequestSigning do
         "ip"=>["212.12.2.1"],
         "ps_time"=>["12312311"],
         "uid"=>["sample-uid"],
-        "hashkey"=>["09d2988f4df1f06f090a25e708173896e303df75"]
+        "hashkey"=>["1201505cde26fa7ce519677d3a526ed90c701400"]
       }
     }
+    before(:each) do
+      Timecop.freeze(Time.local(2014, 10, 8, 10, 5, 0))
+    end
+    after(:each) do
+      Timecop.return
+    end
     it "produces a query string with a hashkey" do
       query_str = test_instance.signed_query_string
       params = CGI::parse(URI.parse("?#{query_str}").query)
       params.each_pair {|k, v| expect(params[k]). to eq(correct_params[k])}
     end
     it "produces the correct hash key" do
-      query_str = test_instance.signed_query_string
       #repeat the hash generation manually here
       tmp = {}
-      correct_params.each_pair {|k,v| tmp[k] = v[0]}
+      correct_params.each_pair {|k, v| tmp[k] = v[0]}
       tmp.delete("hashkey")
       query_str_with_api_key = test_instance.append_api_key(test_instance.hash_to_query(tmp))
       expect(Digest::SHA1.hexdigest(query_str_with_api_key)).to eq(correct_params["hashkey"][0])

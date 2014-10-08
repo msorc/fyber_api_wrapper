@@ -1,7 +1,7 @@
 require "fyber_api_wrapper/version"
-require "fyber_api_wrapper/request_signing"
-require "fyber_api_wrapper/request"
-require "fyber_api_wrapper/offer_wrapper"
+require "fyber_api_wrapper/request/request_signing"
+require "fyber_api_wrapper/request/offer"
+require "fyber_api_wrapper/response/collection"
 
 module FyberApiWrapper
   
@@ -19,10 +19,14 @@ module FyberApiWrapper
   end
 
   class Configuration
-    attr_accessor :format, :app_id, :device_id, :ip, :offer_types, :api_key
+    attr_accessor :format, :appid, :device_id, :ip, :offer_types, :api_key
 
-    def api_url
-      "http://api.sponsorpay.com/feed/v1/offers"
+    def offers_url
+      "http://api.sponsorpay.com/feed/v1/offers.#{format}"
+    end
+
+    def user_agent
+      "Fyber API Wrapper Gem"
     end
   end
 

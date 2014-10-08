@@ -15,8 +15,9 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require 'fyber_api_wrapper'
+require 'timecop'
 require 'yaml'
+require 'fyber_api_wrapper'
 
 unless File.exists?('./spec/fyber_api_config.yml')
   str = <<-MSG
@@ -34,7 +35,7 @@ end
 test_fyber_config = YAML.load_file('./spec/fyber_api_config.yml')
 FyberApiWrapper.configure do |config|
   config.format = test_fyber_config[:format]
-  config.app_id = test_fyber_config[:app_id]
+  config.appid = test_fyber_config[:appid]
   config.device_id = test_fyber_config[:device_id]
   config.ip = test_fyber_config[:ip]
   config.offer_types = test_fyber_config[:offer_types]
