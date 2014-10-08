@@ -18,7 +18,28 @@
 require 'fyber_api_wrapper'
 require 'yaml'
 
-test_fyber_config = YAML.load_file('fyber_api_config.yml')
+unless File.exists?('./spec/fyber_api_config.yml')
+  str = <<-MSG
+    The fyber API configuration file, fyber_api_config.yml, is missing.
+    Copy the sample file:
+
+      cp spec/fyber_api_config.yml.example spec/fyber_api_config.yml
+
+    And then edit the spec/fyber_api_config.yml, replacing placeholders for device ID and app ID with your own values.
+  MSG
+  puts str
+  abort
+end
+
+test_fyber_config = YAML.load_file('./spec/fyber_api_config.yml')
+FyberApiWrapper.configure do |config|
+  config.format = test_fyber_config[:format]
+  config.app_id = test_fyber_config[:app_id]
+  config.device_id = test_fyber_config[:device_id]
+  config.ip = test_fyber_config[:ip]
+  config.offer_types = test_fyber_config[:offer_types]
+  config.api_key = test_fyber_config[:api_key]
+end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
