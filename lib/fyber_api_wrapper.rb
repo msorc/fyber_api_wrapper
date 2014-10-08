@@ -19,6 +19,10 @@ module FyberApiWrapper
     self.configuration = Configuration.new
   end
 
+  def self.get_offers(params)
+    Request::Offer.new(params).get
+  end
+
   class Configuration
     attr_accessor :format, :appid, :device_id, :ip, :offer_types, :api_key
 
