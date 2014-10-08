@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'digest/sha1'
+require 'cgi'
 
 describe FyberApiWrapper::RequestSigning do
   let(:test_class) {
@@ -82,10 +84,37 @@ describe FyberApiWrapper::RequestSigning do
   end
 
   describe "#query_string_digest" do
-    require 'digest/sha1'
     it "returns the SHA1 digest of the string given" do
       str = 'some-test-string&another-test-string'
       expect(test_instance.query_string_digest(str)).to eq(Digest::SHA1.hexdigest(str))
+    end
+  end
+
+  describe "#signed_query_string" do
+    let(:correct_params) {
+      {
+        "answer_to_the_life_universe_and_everything"=>["42"], 
+        "appid"=>["123112"],
+        "ip"=>["212.12.2.1"],
+        "ps_time"=>["12312311"],
+        "uid"=>["sample-uid"],
+        "hashkey"=>["09d2988f4df1f06f090a25e708173896e303df75"]
+      }
+    }
+    it "produces a query string with a hashkey" do
+      query_str = test_instance.signed_query_string
+      params = CGI::parse(URI.parse("?#{query_str}").query)
+      params.each_pair {|k, v| expect(params[k]). to eq(correct_params[k])}
+    end
+    it "produces the correct hash key" do
+      query_str = test_instance.signed_query_string
+      params = CGI::parse(URI.parse("?#{query_str}").query)
+      #repeat the hash generation manually here
+      tmp = {}
+      correct_params.each_pair {|k,v| tmp[k] = v[0]}
+      tmp.delete("hashkey")
+      query_str_with_api_key = test_instance.append_api_key(test_instance.hash_to_query(tmp))
+      expect(Digest::SHA1.hexdigest(query_str_with_api_key)).to eq(correct_params["hashkey"][0])
     end
   end
 
