@@ -1,11 +1,12 @@
 module FyberApiWrapper
   module Response
     class Collection
-      attr_accessor :code, :message, :count, :pages, :information
+      attr_accessor :code, :message, :count, :pages, :information, :offers
       
       def initialize(hsh)
         @hsh = hsh
         populate_collection_info
+        populate_offers
       end
 
       protected
@@ -20,9 +21,13 @@ module FyberApiWrapper
         @information = CollectionInformation.new(*hsh.fetch("information").values)
       end
 
+      def populate_offers
+        @offers = hsh.fetch("offers").map {|offer_hsh| Offer.new(offer_hsh)}
+      end
+
     end
     #since no special logic is required here, a simple struct will do
     CollectionInformation = Struct.new(:app_name, :appid, :virtual_currency, :country, :language, :support_url) 
-    
+
   end
 end

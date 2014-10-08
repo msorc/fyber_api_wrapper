@@ -656,4 +656,28 @@ describe FyberApiWrapper::Response::Collection do
     end
   end
 
+  describe "#offers" do
+    it "returns an empty array for the empty collection" do
+      expect(empty_collection.offers).to eq([])
+    end
+    it "returns an array of offers for a non-empty collection" do
+      expect(collection.offers).to be_a(Array)
+    end
+    it "returns an array of Response::Offer elements" do
+      collection.offers.each {|o| expect(o).to be_a(FyberApiWrapper::Response::Offer)}
+    end
+    it "returns an array of correct size" do
+      expect(collection.offers.count).to eq(30)
+    end
+    it "populates the Offer attributes correctly" do
+      o = collection.offers.last
+      expect(o.title).to eq("mobile.de - mobile Auto Börse")
+      expect(o.offer_id).to eq(353207)
+      expect(o.offer_types).to be_a(Array)
+      expect(o.offer_types.first).to be_a(FyberApiWrapper::Response::OfferType)
+      expect(o.time_to_payout).to be_a(FyberApiWrapper::Response::TimeToPayout)
+      expect(o.thumbnail).to be_a(FyberApiWrapper::Response::Thumbnail)
+    end
+  end
+
 end
