@@ -47,8 +47,8 @@ In your app, configure the FyberApiWrapper and supply those parameters:
   end
 
 ```
-**NOTE:** Since the api_key is confidential, treat it accordingly. Use environment variables, for example, don't put it on github for everyone to see.
- 
+**NOTE:** Since the api_key is confidential, treat it accordingly. For example, use environment variables, do not put it on github for everyone to see.
+
 ### Performing requests and processing request results
 
 Having configured the gem, you can make requests and obtain offers:
