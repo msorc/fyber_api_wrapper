@@ -1,6 +1,7 @@
 require 'uri'
 require 'net/http'
 require 'json'
+require 'zlib'
 
 module FyberApiWrapper
   module Request
@@ -25,7 +26,8 @@ module FyberApiWrapper
       def request_headers
         {
           "Accept"          => "application/#{FyberApiWrapper.configuration.format}",
-          "User-Agent"      => FyberApiWrapper.configuration.user_agent
+          "User-Agent"      => FyberApiWrapper.configuration.user_agent,
+          "Accept-Encoding" => "gzip, deflate"
         }
       end
 
@@ -43,10 +45,10 @@ module FyberApiWrapper
       def process_response
         case @response
           when Net::HTTPUnauthorized
-            json = @response.body
+            json = get_response_body
             raise FyberApiWrapper::NotAuthorizedError, error_message(json)
           when Net::HTTPBadRequest
-            json = @response.body
+            json = get_response_body
             raise FyberApiWrapper::RequiredParameterMissingError, error_message(json)
           when Net::HTTPBadGateway
           when Net::HTTPClientError
@@ -57,7 +59,21 @@ module FyberApiWrapper
           when Net::HTTPNotFound            
             raise FyberApiWrapper::HTTPError, "#{@response.class}"
         end
-        FyberApiWrapper::Response::Collection.new(JSON.parse(@response.body))
+        FyberApiWrapper::Response::Collection.new(JSON.parse(get_response_body))
+      end
+
+      def get_response_body
+        response_body = nil
+        # try Zlib first
+        begin
+          require 'pry' ; binding.pry
+          inflated_data = Zlib::GzipReader.new(StringIO.new(@response.body))
+          response_body = inflated_data.read
+        rescue Zlib::GzipFile::Error
+        # ok just plain text
+          response_body = @response.body
+        end
+        response_body    
       end
 
       def error_message(json)
