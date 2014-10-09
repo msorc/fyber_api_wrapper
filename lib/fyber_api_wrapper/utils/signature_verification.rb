@@ -1,7 +1,7 @@
 require 'digest/sha1'
 
 module FyberApiWrapper
-  module Request
+  module Utils
     module SignatureVerification
       def verify_response_signature!
         server_signature = signature_header_value || ""

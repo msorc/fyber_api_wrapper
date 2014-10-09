@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe FyberApiWrapper::Request::SignatureVerification do
+describe FyberApiWrapper::Utils::SignatureVerification do
   let(:test_class) {
     Class.new do
-      include FyberApiWrapper::Request::SignatureVerification
+      include FyberApiWrapper::Utils::SignatureVerification
       
       attr_reader :signature_header_value
 

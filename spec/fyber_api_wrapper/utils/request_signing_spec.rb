@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'digest/sha1'
 require 'cgi'
 
-describe FyberApiWrapper::Request::RequestSigning do
+describe FyberApiWrapper::Utils::RequestSigning do
   let(:test_class) {
     Class.new do
       
@@ -12,7 +12,7 @@ describe FyberApiWrapper::Request::RequestSigning do
         @params = params
       end
 
-      include FyberApiWrapper::Request::RequestSigning
+      include FyberApiWrapper::Utils::RequestSigning
       
     end
   }

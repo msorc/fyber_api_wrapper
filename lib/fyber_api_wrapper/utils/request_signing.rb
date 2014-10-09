@@ -2,7 +2,7 @@ require 'uri'
 require 'digest/sha1'
 
 module FyberApiWrapper
-  module Request
+  module Utils
     module RequestSigning
       def ordered_params_for_signing
         params_copy = params.dup

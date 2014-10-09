@@ -1,8 +1,9 @@
 require "fyber_api_wrapper/version"
-require "fyber_api_wrapper/request/request_signing"
-require "fyber_api_wrapper/request/signature_verification"
+require "fyber_api_wrapper/utils/request_signing"
+require "fyber_api_wrapper/utils/signature_verification"
 require "fyber_api_wrapper/request/base_request"
 require "fyber_api_wrapper/request/offer"
+require "fyber_api_wrapper/response/http_response"
 require "fyber_api_wrapper/response/offer"
 require "fyber_api_wrapper/response/collection"
 
