@@ -6,9 +6,9 @@ module FyberApiWrapper
       attr_accessor :code, :message, :count, :pages, :information, :offers
       
       def initialize(hsh)
-        @hsh = hsh
-        populate_collection_info
-        populate_offers
+        #@hsh = hsh
+        populate_collection_info(hsh)
+        populate_offers(hsh)
       end
 
       def each(*args, &block)
@@ -25,9 +25,9 @@ module FyberApiWrapper
 
       protected
 
-      attr_reader :hsh
+      #attr_reader :hsh
       
-      def populate_collection_info
+      def populate_collection_info(hsh)
         @code = hsh.fetch("code")
         @message = hsh.fetch("message")
         @count = hsh.fetch("count")
@@ -35,7 +35,7 @@ module FyberApiWrapper
         @information = CollectionInformation.new(*hsh.fetch("information").values)
       end
 
-      def populate_offers
+      def populate_offers(hsh)
         @offers = hsh.fetch("offers").map {|offer_hsh| Offer.new(offer_hsh)}
       end
 
