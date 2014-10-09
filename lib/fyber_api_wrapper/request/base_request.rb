@@ -14,10 +14,14 @@ module FyberApiWrapper
 
       def get
         make_request
+        check_http_errors!
+        fetch_response_body
         process_response        
       end
 
       protected
+
+      attr_reader :request, :response, :response_body
 
       def request_url
         raise "Implement #request_url in your subclass and provide the URL to send request to"
@@ -32,8 +36,7 @@ module FyberApiWrapper
       end
 
       def make_request
-        @request = nil
-        @response = nil
+        reset_request_vars!
         url_parts = URI.parse(request_url)
         @request = Net::HTTP::Get.new("#{url_parts.path}?#{url_parts.query}")
         request_headers.each { |h, v| @request.add_field(h, v) }
@@ -42,31 +45,45 @@ module FyberApiWrapper
         end        
       end
 
-      def process_response
+      def check_http_errors!
         case @response
-          when Net::HTTPUnauthorized
-            json = get_response_body
-            raise FyberApiWrapper::NotAuthorizedError, error_message(json)
-          when Net::HTTPBadRequest
-            json = get_response_body
-            raise FyberApiWrapper::RequiredParameterMissingError, error_message(json)
           when Net::HTTPBadGateway
           when Net::HTTPClientError
           when Net::HTTPConflict
           when Net::HTTPFatalError
           when Net::HTTPForbidden
           when Net::HTTPGatewayTimeOut
-          when Net::HTTPNotFound            
-            raise FyberApiWrapper::HTTPError, "#{@response.class}"
+          when Net::HTTPNotFound
+            raise FyberApiWrapper::HTTPError, "Could not perform the request. Got #{@response.class} "                      
         end
-        FyberApiWrapper::Response::Collection.new(JSON.parse(get_response_body))
+      end
+
+      def reset_request_vars!
+        @request = nil
+        @response = nil
+        @response_body = nil        
+      end
+
+      def fetch_response_body
+        @response_body = get_response_body
+      end
+
+      def process_response
+        case @response
+          when Net::HTTPUnauthorized
+            raise FyberApiWrapper::NotAuthorizedError, error_message(@response_body)
+          when Net::HTTPBadRequest
+            raise FyberApiWrapper::RequiredParameterMissingError, error_message(@response_body)
+        end
+        # if we got here, we have some valid data.
+        verify_response_signature!
+        FyberApiWrapper::Response::Collection.new(JSON.parse(@response_body))
       end
 
       def get_response_body
         response_body = nil
         # try Zlib first
         begin
-          require 'pry' ; binding.pry
           inflated_data = Zlib::GzipReader.new(StringIO.new(@response.body))
           response_body = inflated_data.read
         rescue Zlib::GzipFile::Error
@@ -83,6 +100,11 @@ module FyberApiWrapper
       private
 
       include RequestSigning
+      include SignatureVerification
+
+      def signature_header_value
+        @response['X-Sponsorpay-Response-Signature']
+      end
 
       def mandatory_request_params
         {

@@ -1,5 +1,6 @@
 require "fyber_api_wrapper/version"
 require "fyber_api_wrapper/request/request_signing"
+require "fyber_api_wrapper/request/signature_verification"
 require "fyber_api_wrapper/request/base_request"
 require "fyber_api_wrapper/request/offer"
 require "fyber_api_wrapper/response/offer"
@@ -43,6 +44,9 @@ module FyberApiWrapper
   end
   
   class HTTPError < Exception
+  end
+
+  class SignatureVerificationError < Exception
   end
 
 
