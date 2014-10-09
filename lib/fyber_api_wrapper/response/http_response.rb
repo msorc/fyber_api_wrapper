@@ -26,27 +26,15 @@ module FyberApiWrapper
       end
 
       def unauthorized?
-        @request_response.class == Net::HTTPUnauthorized
+        @request_response.is_a?(Net::HTTPUnauthorized)
       end
 
       def bad_request?
-        @request_response.class == Net::HTTPBadRequest
+        @request_response.is_a?(Net::HTTPBadRequest)
       end
 
       def http_error?
-        case @request_response
-          when Net::HTTPBadGateway
-          when Net::HTTPClientError
-          when Net::HTTPConflict
-          when Net::HTTPFatalError
-          when Net::HTTPForbidden
-          when Net::HTTPGatewayTimeOut
-          when Net::HTTPNotFound
-            true
-          else
-            false
-        end
-
+        !unauthorized? && !bad_request? && !@request_response.is_a?(Net::HTTPOK)
       end
 
       def response_body
@@ -64,7 +52,6 @@ module FyberApiWrapper
       def signature_header_value
         @request_response['X-Sponsorpay-Response-Signature']
       end
-
 
       def raise_if_http_error!
         raise FyberApiWrapper::HTTPError, "Could not perform the request. Got #{@request_response.class} " if http_error?
