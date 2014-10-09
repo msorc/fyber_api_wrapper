@@ -2,7 +2,9 @@
 
 This gem wraps over the [Fyber Offer Wall API](http://developer.fyber.com/content/ios/offer-wall/offer-api/ "Fyber Offer Wall API") and provides you with a simple way to query the offers from your Ruby app.
 
-For now, although you can set some other format, *only JSON* will be parsed correctly.
+The FyberApiWrapper will hide all the gritty details like compression, request signing and server response signature checks from you, so you can just concentrate on querying the API.
+
+For now, although you can set some other format, **only JSON** will be parsed correctly.
 
 ## Installation
 
@@ -99,6 +101,13 @@ Having configured the gem, you can make requests and obtain offers:
 
 ```
 
+### Error handling
+
+The FyberAPIWrapper will raise exceptions in the following cases:
+
+* a 401 Unauthorized response will cause the FyberApiWrapper::NotAuthorizedError to be raised. The most likely cause of that is forgetting to configure the **api_key** ;
+* a 400 Bad Request response will cause the FyberApiWrapper::RequiredParameterMissingError to be raised. This occurs if you forget to specify parameters such as **appid** and **device_id** ;
+* all the other HTTP error code will trigger the FyberApiWrapper::HTTPError exception.
 
 ## FAQ
 
