@@ -22,3 +22,5 @@ tmp
 mkmf.log
 
 /spec/fyber_api_config.yml
+
+spec/vcr_cassettes/*
