@@ -106,7 +106,7 @@ Having configured the gem, you can make requests and obtain offers:
 The FyberAPIWrapper will raise exceptions in the following cases:
 
 * a 401 Unauthorized response will cause the FyberApiWrapper::NotAuthorizedError to be raised. The most likely cause of that is forgetting to configure the **api_key** ;
-* a 400 Bad Request response will cause the FyberApiWrapper::RequiredParameterMissingError to be raised. This occurs if you forget to specify parameters such as **appid** and **device_id** ;
+* a 400 Bad Request response will cause the FyberApiWrapper::BadRequestError to be raised. This occurs if you forget to specify parameters such as **appid** and **device_id**, or simply requesting a page that does not exist;
 * all the other HTTP error code will trigger the FyberApiWrapper::HTTPError exception.
 
 ## FAQ
