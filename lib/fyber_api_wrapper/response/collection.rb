@@ -23,6 +23,10 @@ module FyberApiWrapper
         offers[0]
       end
 
+      def empty?
+        count == 0
+      end
+
       protected
 
       #attr_reader :hsh

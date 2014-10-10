@@ -701,4 +701,13 @@ describe FyberApiWrapper::Response::Collection do
     end
   end
 
+  describe "#empty?" do
+    it "returns true if collection's count is zero" do
+      expect(empty_collection).to be_empty
+    end
+    it "returns false if collection's count is not zero" do
+      expect(collection).to_not be_empty
+    end
+  end
+
 end
