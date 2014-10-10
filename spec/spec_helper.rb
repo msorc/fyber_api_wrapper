@@ -39,7 +39,8 @@ end
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/vcr_cassettes'
   c.hook_into :webmock 
-  c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 7200 }
+  #c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 7200 }
+  c.default_cassette_options = { :match_requests_on => [:method, :host, :path] }
   c.configure_rspec_metadata!
 end
 
