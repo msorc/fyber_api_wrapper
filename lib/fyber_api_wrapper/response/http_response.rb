@@ -62,7 +62,7 @@ module FyberApiWrapper
       end
 
       def raise_if_bad_request!
-        raise FyberApiWrapper::RequiredParameterMissingError, error_message if bad_request?
+        raise FyberApiWrapper::BadRequestError, error_message if bad_request?
       end
 
       def error_message

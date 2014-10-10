@@ -52,7 +52,7 @@ describe FyberApiWrapper::Request::Offer do
       end
       it "raises a required parameter missing error in case the API key is missing" do
         wrapper = FyberApiWrapper::Request::Offer.new(params)
-        expect { wrapper.get }.to raise_error(FyberApiWrapper::RequiredParameterMissingError)
+        expect { wrapper.get }.to raise_error(FyberApiWrapper::BadRequestError)
       end
     end
   end

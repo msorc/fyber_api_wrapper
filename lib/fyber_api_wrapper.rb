@@ -38,7 +38,7 @@ module FyberApiWrapper
     end
   end
 
-  class RequiredParameterMissingError < Exception
+  class BadRequestError < Exception
   end
 
   class NotAuthorizedError < Exception
