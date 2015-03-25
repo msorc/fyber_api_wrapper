@@ -27,7 +27,7 @@ module FyberApiWrapper
   end
 
   class Configuration
-    attr_accessor :format, :appid, :device_id, :ip, :offer_types, :api_key
+    attr_accessor :format, :appid, :device_id, :ip, :offer_types, :api_key, :locale
 
     def offers_url
       "http://api.sponsorpay.com/feed/v1/offers.#{format}"

@@ -65,6 +65,7 @@ module FyberApiWrapper
           ip:           FyberApiWrapper.configuration.ip,
           offer_types:  FyberApiWrapper.configuration.offer_types,
           api_key:      FyberApiWrapper.configuration.api_key,
+          locale:      FyberApiWrapper.configuration.locale,
           timestamp:    Time.now.to_i
         }        
       end
